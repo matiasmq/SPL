@@ -124,7 +124,8 @@ const Carrito = () => {
               {cartItems.map((item, index) => (
                 <li key={index}>
                   <div>
-                    <img src={item.imagen} alt={item.nombre} />
+                    <img src={item.ruta_imagen} alt={item.nombre} /><br />
+                    <span>{item.nombre}</span>
                     <br />
                     <span>Precio: ${item.valor_unitario}</span>
                   </div>
