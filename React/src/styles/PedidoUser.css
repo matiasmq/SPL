@@ -55,12 +55,12 @@
 
 .fondo-pedido-user .pedido-listo {
   background-color: #27ae60;
-  color: white;
+  color: rgb(0, 0, 0);
 }
 
 .fondo-pedido-user .pedido-pendiente {
   background-color: #e74c3c;
-  color: white;
+  color: rgb(0, 0, 0);
 }
 
 .fondo-pedido-user .pagination {
