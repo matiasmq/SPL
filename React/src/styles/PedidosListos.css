@@ -1,0 +1,57 @@
+.fondo-user-pedidos-listos {
+  display: flex;
+  flex-direction: column;
+  background-image: url('../../public/fondo.jpg');
+  background-size: cover;
+  background-repeat: no-repeat;
+  height: 90vh;
+  padding: 100px;
+  margin: -10px;
+  overflow-y: auto;
+}
+
+.user-pedidos-listos {
+  margin: 20px auto;
+  max-width: 90%;
+}
+
+.fondo-user-pedidos-listos .back-to-admin-link-products {
+  display: inline-flex;
+  align-items: center;
+  text-decoration: none;
+  color: #ffffff;
+  margin-bottom: 20px;
+}
+
+.fondo-user-pedidos-listos .back-to-admin-link-products i {
+  margin-right: 5px;
+}
+
+.fondo-user-pedidos-listos .back-to-admin-link-products:hover {
+  color: #ffffff;
+}
+
+.fondo-user-pedidos-listos h2 {
+  margin-bottom: 20px;
+}
+
+.fondo-user-pedidos-listos table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 20px;
+}
+
+.fondo-user-pedidos-listos th,
+.fondo-user-pedidos-listos td {
+  border: 1px solid #ddd;
+  padding: 8px;
+  text-align: left;
+}
+
+.fondo-user-pedidos-listos th {
+  background-color: #f2f2f2;
+}
+
+.fondo-user-pedidos-listos tbody tr:nth-child(even) {
+  background-color: #f9f9f9;
+}

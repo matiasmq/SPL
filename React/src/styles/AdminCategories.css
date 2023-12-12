@@ -1,0 +1,113 @@
+.admin-categories-container {
+  display: flex;
+  justify-content: flex-start;
+  align-items: flex-start;
+  height: 100vh;
+  background-image: url('../../public/fondo.jpg');
+  background-size: cover;
+  background-repeat: no-repeat;
+  flex-direction: column;
+  margin: -10px;
+  overflow-y: auto;
+  padding: 20px 0;
+}
+
+.back-to-admin-link-categories {
+  margin-left: 7%;
+  margin-top: -5%;
+  text-decoration: none;
+  color: #ffffff;
+  display: flex;
+  align-items: center;
+}
+
+.admin-categories-title {
+  text-align: center;
+  color: #ffffff;
+  margin-top: 5%;
+  margin-left: 0;
+}
+
+.add-categories-link {
+  margin-top: 5%;
+  margin-left: auto;
+  margin-right: 7%;
+  padding: 5px 10px;
+  background-color: #edd100;
+  color: #000000;
+  text-decoration: none;
+  border: none;
+  cursor: pointer;
+}
+
+.add-categories-link:hover {
+  background-color: #ffc107;
+}
+
+.admin-categories-table {
+  width: 97%;
+  border-collapse: collapse;
+  opacity: 0.85;
+  margin-top: -10px;
+  margin: 20px auto;
+}
+
+.admin-categories-table th,
+.admin-categories-table td {
+  border: 1px solid #000000;
+  font-size: 18px;
+  padding: 8px;
+  text-align: left;
+}
+
+.admin-categories-table th:nth-child(1),
+.admin-categories-table td:nth-child(1),
+.admin-categories-table th:nth-child(2),
+.admin-categories-table td:nth-child(2),
+.admin-categories-table th:nth-child(4),
+.admin-categories-table td:nth-child(4),
+.admin-categories-table th:nth-child(5),
+.admin-categories-table td:nth-child(5) {
+  width: 16%;
+}
+
+.wide-input {
+  width: 98%;
+}
+
+
+.back-link {
+  margin-top: 10px;
+  text-align: center;
+  text-decoration: none;
+  color: #000;
+  background-color: #edd100;
+  padding: 10px;
+  border-radius: 5px;
+  display: block;
+  width: 100px;
+  cursor: pointer;
+  font-size: 16px;
+}
+
+.back-link:hover {
+  background-color: #ffc107;
+}
+
+.edit-buttons-categories {
+  margin-top: 5px;
+}
+
+.edit-buttons-categories button {
+  background-color: #edd100;
+  color: #000000;
+  border: none;
+  border-radius: 5px;
+  padding: 5px 10px;
+  cursor: pointer;
+  margin-right: 5px;
+}
+
+.edit-buttons-categories button:hover {
+  background-color: #ffc107;
+}

@@ -1,0 +1,150 @@
+.admin-products-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  background-image: url('../../public/fondo.jpg');
+  background-size: cover;
+  background-repeat: no-repeat;
+  flex-direction: column;
+  padding: 20px;
+  margin: -10px;
+  overflow-y: auto;
+}
+
+.admin-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+  margin-bottom: 20px;
+}
+
+.admin-products-title {
+  margin-left: auto;
+  margin-right: auto;
+  font-size: 25px;
+  text-align: center;
+  color: #ffffff;
+}
+
+.add-products-link {
+  color: rgb(0, 0, 0);
+  font-weight: bold;
+  text-decoration: none;
+  padding: 5px 5px;
+  background-color: #edd100;
+}
+
+.add-products-link:hover {
+  background-color: #ffc107;
+}
+
+.back-to-admin-link-products {
+  margin-top: 10px;
+  margin-left: 7%;
+  text-decoration: none;
+  color: #ffffff;
+  display: flex;
+  align-items: center;
+}
+
+.back-to-admin-link-products i {
+  margin-right: 5px;
+  font-size: 18px;
+}
+
+.category-filter {
+  display: flex;
+  margin-top: 10px;
+  align-items: center;
+}
+
+.category-filter label {
+  color: #ffffff;
+}
+
+.category-filter select {
+  padding: 5px;
+  margin-left: 5px;
+}
+
+.table-container {
+  scale: 0.9;
+  width: 100%;
+  overflow-x: auto; 
+}
+
+.table-products-container {
+  border-collapse: collapse;
+  font-size: 16px;
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 16px;
+}
+
+th,
+td {
+  border: 1px solid #000000;
+  padding: 8px;
+  text-align: left;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 100px;
+}
+
+th {
+  background-color: #f2f2f2;
+}
+
+tbody tr:nth-child(even) {
+  background-color: #f2f2f2;
+}
+
+tbody tr:nth-child(odd) {
+  background-color: #fff;
+}
+
+.table-products-container button {
+  padding: 5px 10px;
+  background-color: #edd100;
+  color: #000000;
+  border: none;
+  cursor: pointer;
+  margin-right: 5px;
+}
+
+.table-products-container button:hover {
+  background-color: #ffc107;
+}
+
+.admin-products-table td input[type="text"],
+.admin-products-table td input[type="checkbox"],
+.admin-products-table td select {
+  max-width: 160px;
+  width: 100%;
+}
+
+td:nth-child(n+3):nth-child(-n+4),
+.admin-products-table td:nth-child(n+3):nth-child(-n+4) input[type="checkbox"],
+.admin-products-table td:nth-child(n+3):nth-child(-n+4) select {
+  max-width: 100px;
+  width: 11%;
+}
+
+td:nth-child(5) input[type="number"] {
+  width: 50px;
+}
+
+td:nth-child(6) input[type="text"] {
+  width: 100px;
+}
+
+td:nth-child(7) input[type="number"] {
+  width: 70px;
+}
+

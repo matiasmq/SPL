@@ -1,0 +1,82 @@
+.fondo-pedido-user {
+  display: flex;
+  flex-direction: column;
+  background-image: url('../../public/fondo.jpg');
+  background-size: cover;
+  background-repeat: no-repeat;
+  height: 90vh;
+  padding: 100px;
+  margin: -10px;
+  overflow-y: auto;
+}
+
+.fondo-pedido-user h2 {
+  text-align: center;
+  margin-bottom: 20px;
+}
+
+.fondo-pedido-user .user-listos {
+  margin-bottom: 4px;
+  margin-right: auto;
+  margin-left: 84%;
+  padding: 10px 15px;
+  background-color: #edd100;
+  color: rgb(0, 0, 0);
+  text-decoration: none;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.fondo-pedido-user .user-listos:hover {
+  background-color: #ffc107;
+}
+
+.fondo-pedido-user table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 20px;
+}
+
+.fondo-pedido-user th,
+.fondo-pedido-user td {
+  border: 1px solid #ddd;
+  padding: 8px;
+  text-align: left;
+}
+
+.fondo-pedido-user th {
+  background-color: #f2f2f2;
+}
+
+.fondo-pedido-user tbody tr:nth-child(even) {
+  background-color: #f9f9f9;
+}
+
+.fondo-pedido-user .pedido-listo {
+  background-color: #27ae60;
+  color: white;
+}
+
+.fondo-pedido-user .pedido-pendiente {
+  background-color: #e74c3c;
+  color: white;
+}
+
+.fondo-pedido-user .pagination {
+  margin-top: 20px;
+  display: flex;
+  justify-content: center;
+}
+
+.fondo-pedido-user .pagination button {
+  margin: 0 5px;
+  padding: 5px 10px;
+  border: 1px solid #ccc;
+  background-color: #fff;
+  cursor: pointer;
+}
+
+.fondo-pedido-user .pagination button:hover {
+  background-color: #f2f2f2;
+}
