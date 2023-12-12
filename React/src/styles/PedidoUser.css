@@ -53,16 +53,6 @@
   background-color: #f9f9f9;
 }
 
-.fondo-pedido-user .pedido-listo {
-  background-color: #27ae60;
-  color: rgb(0, 0, 0);
-}
-
-.fondo-pedido-user .pedido-pendiente {
-  background-color: #e74c3c;
-  color: rgb(0, 0, 0);
-}
-
 .fondo-pedido-user .pagination {
   margin-top: 20px;
   display: flex;
