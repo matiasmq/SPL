@@ -1,6 +1,5 @@
 const express = require('express');
 const cors = require('cors');
-const {db} = require("./connectionNoSql");
 
 
 class Server{
@@ -41,9 +40,7 @@ class Server{
     listen(){
         this.app.listen(this.port, () =>{
             console.log('Working on :', this.port);
-            db();
         })
     }
 }
 module.exports = Server;
-
