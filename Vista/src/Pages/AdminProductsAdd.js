@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
-import './../styles/AdminProductsAdd.css';
+import '../styles/AdminProductsAdd.css';
 
 function AdminProductsAdd() {
   const [categories, setCategories] = useState([]);

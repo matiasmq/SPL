@@ -1,6 +1,6 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { useUser } from '../Components/UserContext';
+import { useUser } from './UserContext';
 import '../styles/Header.css';
 
 function Header() {

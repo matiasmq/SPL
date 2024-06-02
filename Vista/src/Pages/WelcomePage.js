@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import './../styles/Welcomepage.css';
+import '../styles/Welcomepage.css';
 import CartButton from '../Components/CartButton';
 
 function WelcomePage() {

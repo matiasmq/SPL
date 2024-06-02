@@ -1,7 +1,7 @@
 import React, { useContext } from 'react';
 import { BsCartCheckFill } from 'react-icons/bs';
-import { CartContext } from '../Components/CartContext';
-import { UserContext } from '../Components/UserContext';
+import { CartContext } from './CartContext';
+import { UserContext } from './UserContext';
 
 const CartButton = ({ item, onAddToCart }) => {
   const { cart, setCart } = useContext(CartContext);

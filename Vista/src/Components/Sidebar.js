@@ -1,8 +1,8 @@
 import React, { useContext, useEffect, useRef  } from 'react';
 import logo from './negro.png';
-import NavigationItem from '../Components/NavigationItem';
-import { CartContext } from '../Components/CartContext';
-import { useUser } from '../Components/UserContext';
+import NavigationItem from './NavigationItem';
+import { CartContext } from './CartContext';
+import { useUser } from './UserContext';
 import { useNavigate } from 'react-router-dom';
 
 function Sidebar({ categorias, isAdmin }) {

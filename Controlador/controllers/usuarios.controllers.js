@@ -6,7 +6,7 @@ const { insertUser,
         deleteUser,
         checkRut,
         checkPhoneNumber,
-        checkEmail } = require("../models/query_usuarios");
+        checkEmail } = require("../../Modelo/models/query_usuarios");
 
 const bcryptjs = require('bcryptjs');
 

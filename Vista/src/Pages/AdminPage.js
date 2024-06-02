@@ -1,6 +1,6 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import './../styles/AdminPage.css';
+import '../styles/AdminPage.css';
 
 function AdminPage() {
   return (
