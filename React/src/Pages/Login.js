@@ -123,9 +123,6 @@ function Login({ setIsAdmin, setUser }) {
           </button>
         </form>
         <p>
-          <a href="/CambioContrasena">{Data.forgotPasswordLink}</a>
-        </p>
-        <p>
           ¿No tienes cuenta?
           <a href="/Registro">{Data.registerLink}</a>
         </p>

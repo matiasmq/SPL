@@ -84,11 +84,6 @@ function Sidebar({ categorias, isAdmin }) {
                                 Mi Pedido
                             </NavigationItem>
                         </li>
-                        <li>
-                            <NavigationItem to="/UserProfile" exact activeClassName="active-page">
-                                Mi Perfil
-                            </NavigationItem>
-                        </li>
                         <li className='logout-container'>
                         <button class="logout" onClick={handleLogout}>
                             <i class="fas fa-sign-out-alt"></i> Cerrar sesión

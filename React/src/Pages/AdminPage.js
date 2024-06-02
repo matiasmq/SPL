@@ -14,11 +14,6 @@ function AdminPage() {
         </section>
 
         <section>
-          <h3>Gestión de Roles</h3>
-          <Link to="/AdminRol">Ver Roles</Link>
-        </section>
-
-        <section>
           <h3>Gestión de Categorias</h3>
           <Link to="/AdminCategories">Ir a la Gestión de Categorias</Link>
         </section>
@@ -27,12 +22,7 @@ function AdminPage() {
           <h3>Gestión de Productos</h3>
           <Link to="/AdminProducts">Ir a la Gestión de Productos</Link>
         </section>
-
-        <section>
-          <h3>Estadísticas</h3>
-          <Link to="/AdminStats">Ver Estadísticas</Link>
-        </section>
-
+        
         <section>
           <h3>Panel de Cajera</h3>
           <Link to="/CajeraPage">Ir al Panel de Cajera</Link>
