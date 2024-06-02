@@ -55,10 +55,6 @@ function UserOrderStatus() {
     return estado === 'Listo' ? 'pedido-listo' : 'pedido-pendiente';
   };
 
-  const handlePedidosListos = () => {
-    navigate('/userlistos');
-  };
-
 
 const paginate = (pageNumber) => setCurrentPage(pageNumber);
 
@@ -78,7 +74,6 @@ const renderPageNumbers = pageCount > 1 && Array.from({ length: pageCount }).map
 return (
   <div className='fondo-pedido-user'>
     <h2>Mi Pedido</h2>
-    <button className='user-listos' onClick={handlePedidosListos}>Pedidos Listos</button>
     <table>
       <thead>
         <tr>
@@ -95,7 +90,7 @@ return (
         {currentOrders.reverse().map(order => (
           <tr key={order.id_detalle_boleta} className={getOrderStatusClass(order.estado)}>
             <td>{order.id_detalle_boleta}</td>
-            <td>{order.fechaYHora}</td>
+            <td>{order.fecha_emision}</td>
             <td>{order.nombre_usuario}</td>
             <td>{order.rut}</td>
             <td>{order.nombre_producto}</td>

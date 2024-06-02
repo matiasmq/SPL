@@ -22,11 +22,6 @@ function AdminPage() {
           <h3>Gestión de Productos</h3>
           <Link to="/AdminProducts">Ir a la Gestión de Productos</Link>
         </section>
-        
-        <section>
-          <h3>Panel de Cajera</h3>
-          <Link to="/CajeraPage">Ir al Panel de Cajera</Link>
-        </section>
       </div>
     </div>
   );

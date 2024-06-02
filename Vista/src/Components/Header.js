@@ -10,24 +10,10 @@ function Header() {
     if (user && user.rol === 'ADMIN') {
       return (
         <>
-          <Link to="/CajeraPage" className="header-link">
-            Panel Cajera
-          </Link>
           <Link to="/Adminpage" className="header-link">
             Panel de Administración
           </Link>
         </>
-      );
-    }
-    return null;
-  };
-
-  const renderCajeroButton = () => {
-    if (user && user.rol === 'CAJERO') {
-      return (
-        <Link to="/CajeraPage" className="header-link">
-          Panel Cajera
-        </Link>
       );
     }
     return null;
@@ -42,7 +28,6 @@ function Header() {
         {!user && <Link to="/login" className="header-link">Login</Link>}
         <Link to="/sobre-nosotros" className="header-link">Sobre Nosotros</Link>
         {renderAdminButton()}
-        {renderCajeroButton()}
       </div>
     </div>
   );
