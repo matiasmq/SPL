@@ -24,7 +24,7 @@ function UserPedidosListos() {
 
         const data = await response.json();
         const pedidosConFechaFormateada = data.msg.map(pedido => {
-          const fechaCompleta = new Date(pedido.fecha_creacion);
+          const fechaCompleta = new Date(pedido.fecha_emision);
           const dia = fechaCompleta.getDate().toString().padStart(2, '0');
           const mes = (fechaCompleta.getMonth() + 1).toString().padStart(2, '0');
           const año = fechaCompleta.getFullYear();
@@ -32,7 +32,7 @@ function UserPedidosListos() {
           const fechaFormateada = `${dia}-${mes}-${año} ${hora}`;
           return {
             ...pedido,
-            fecha_creacion: fechaFormateada,
+            fecha_emision: fechaFormateada,
           };
         });
 
@@ -74,7 +74,7 @@ function UserPedidosListos() {
             {pedidosListos.slice(0).reverse().map(pedido => (
               <tr key={pedido.id_detalle_boleta}>
                 <td>{pedido.id_detalle_boleta}</td>
-                <td>{pedido.fecha_creacion}</td>
+                <td>{pedido.fecha_emision}</td>
                 <td>{pedido.nombre_producto}</td>
                 <td>{pedido.cantidad}</td>
                 <td>{pedido.nombre_usuario}</td>

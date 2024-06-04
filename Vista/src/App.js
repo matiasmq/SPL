@@ -13,12 +13,9 @@ import Carrito from './Pages/Carrito';
 import Categoria from './Pages/Categoria';
 import Login from './Pages/Login';
 import Registro from './Pages/Registro';
-import CambioContrasena from './Pages/CambioContrasena';
 import Sidebar from './Components/Sidebar';
 import AdminPage from './Pages/AdminPage';
-import UserProfile from './Pages/UserProfile';
 import Users from './Pages/Users';
-import AdminRol from './Pages/AdminRol';
 import AdminProductsAdd from './Pages/AdminProductsAdd';
 import AdminProducts from './Pages/AdminProducts';
 import AdminCategories from './Pages/AdminCategories';
@@ -28,7 +25,6 @@ import Compra from './Pages/Compra';
 import UserOrderStatus from './Pages/UserOrderStatus';
 import UserPedidosListos from './Pages/UserPedidosListos';
 import OrderManagement from './Pages/OrderManagement';
-import AdminStats from './Pages/AdminStats';
 import './App.css';
 
 function App() {
@@ -72,11 +68,8 @@ function App() {
                                 <Route path="/categoria/:categoriaId" element={<Categoria />} />
                                 <Route path="/login" element={<Login setIsAdmin={setIsAdmin} setUser={setUser} />} />
                                 <Route path="/registro" element={<Registro />} />
-                                <Route path="/cambiocontrasena" element={<CambioContrasena />} />
-                                <Route path="/UserProfile" element={<UserProfile user={user} />} />
                                 <Route path="/adminpage" element={<AdminPage />} />
                                 <Route path="/Users" element={<Users />} />
-                                <Route path="/adminrol" element={<AdminRol />} />
                                 <Route path="/adminproductsadd" element={<AdminProductsAdd />} />
                                 <Route path="/adminproducts" element={<AdminProducts />} />
                                 <Route path="/admincategories" element={<AdminCategories />} />
@@ -86,7 +79,6 @@ function App() {
                                 <Route path="/userorderstatus" element={<UserOrderStatus />} />
                                 <Route path="/userlistos" element={<UserPedidosListos />} />
                                 <Route path="/cajerapage" element={<OrderManagement />} />
-                                <Route path="/adminstats" element={<AdminStats />} />
                             </Routes>
                         </div>
                         <Footer />

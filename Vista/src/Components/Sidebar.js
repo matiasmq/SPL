@@ -1,8 +1,8 @@
 import React, { useContext, useEffect, useRef  } from 'react';
 import logo from './negro.png';
-import NavigationItem from '../Components/NavigationItem';
-import { CartContext } from '../Components/CartContext';
-import { useUser } from '../Components/UserContext';
+import NavigationItem from './NavigationItem';
+import { CartContext } from './CartContext';
+import { useUser } from './UserContext';
 import { useNavigate } from 'react-router-dom';
 
 function Sidebar({ categorias, isAdmin }) {
@@ -82,11 +82,6 @@ function Sidebar({ categorias, isAdmin }) {
                         <li>
                             <NavigationItem to="/UserOrderStatus" exact activeClassName="active-page">
                                 Mi Pedido
-                            </NavigationItem>
-                        </li>
-                        <li>
-                            <NavigationItem to="/UserProfile" exact activeClassName="active-page">
-                                Mi Perfil
                             </NavigationItem>
                         </li>
                         <li className='logout-container'>

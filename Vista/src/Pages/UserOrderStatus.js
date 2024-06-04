@@ -26,7 +26,7 @@ function UserOrderStatus() {
         if (data && Array.isArray(data.msg)) {
           const filteredOrders = data.msg.filter(order => order.rut === userRut);
           const ordersWithDate = filteredOrders.map(order => {
-            const fechaCompleta = new Date(order.fecha);
+            const fechaCompleta = new Date(order.fecha_emision);
             fechaCompleta.setHours(fechaCompleta.getHours());
             const dia = fechaCompleta.getDate().toString().padStart(2, '0');
             const mes = (fechaCompleta.getMonth() + 1).toString().padStart(2, '0');
@@ -34,7 +34,7 @@ function UserOrderStatus() {
             const hora = fechaCompleta.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', second: '2-digit' });
             return {
               ...order,
-              fechaYHora: `${dia}-${mes}-${año} ${hora}`
+              fecha_emision: `${dia}-${mes}-${año} ${hora}`
             };
           });
           setUserOrders(ordersWithDate);
@@ -53,10 +53,6 @@ function UserOrderStatus() {
 
   const getOrderStatusClass = (estado) => {
     return estado === 'Listo' ? 'pedido-listo' : 'pedido-pendiente';
-  };
-
-  const handlePedidosListos = () => {
-    navigate('/userlistos');
   };
 
 
@@ -78,7 +74,6 @@ const renderPageNumbers = pageCount > 1 && Array.from({ length: pageCount }).map
 return (
   <div className='fondo-pedido-user'>
     <h2>Mi Pedido</h2>
-    <button className='user-listos' onClick={handlePedidosListos}>Pedidos Listos</button>
     <table>
       <thead>
         <tr>
@@ -95,7 +90,7 @@ return (
         {currentOrders.reverse().map(order => (
           <tr key={order.id_detalle_boleta} className={getOrderStatusClass(order.estado)}>
             <td>{order.id_detalle_boleta}</td>
-            <td>{order.fechaYHora}</td>
+            <td>{order.fecha_emision}</td>
             <td>{order.nombre_usuario}</td>
             <td>{order.rut}</td>
             <td>{order.nombre_producto}</td>
