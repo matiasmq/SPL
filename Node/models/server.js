@@ -15,7 +15,7 @@ class Server {
     }
 
     middlewares() {
-        // Configurar CORS para permitir solicitudes de cualquier origen
+        // Configurasr CORS para permitir solicitudes de cualquier origen
         this.app.use(cors());
 
         // Parsear JSON

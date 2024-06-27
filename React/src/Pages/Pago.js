@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import '../styles/Carrito.css';
-
+//a
 const Pago = () => {
     const navigate = useNavigate();
     const [direccionEncontrada, setDireccionEncontrada] = useState(null);
