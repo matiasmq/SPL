@@ -1,11 +1,9 @@
-
 import React, { useState, useEffect } from 'react';
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 import { CartProvider } from './Components/CartContext';
 import { UserProvider } from './Components/UserContext';
 import WelcomePage from './Pages/WelcomePage';
 import Container from 'react-bootstrap/Container';
-import NavigationItem from './Components/NavigationItem';
 import Footer from './Components/Footer';
 import Header from './Components/Header';
 import SobreNosotros from './Pages/SobreNosotros';
@@ -18,7 +16,10 @@ import Sidebar from './Components/Sidebar';
 import AdminPage from './Pages/AdminPage';
 import UserProfile from './Pages/UserProfile';
 import Users from './Pages/Users';
+import Success from './Pages/Success';
 import AdminRol from './Pages/AdminRol';
+import Response from './Pages/Response';
+import Failure from './Pages/Failure';
 import AdminProductsAdd from './Pages/AdminProductsAdd';
 import AdminProducts from './Pages/AdminProducts';
 import AdminCategories from './Pages/AdminCategories';
@@ -87,6 +88,9 @@ function App() {
                                 <Route path="/userlistos" element={<UserPedidosListos />} />
                                 <Route path="/cajerapage" element={<OrderManagement />} />
                                 <Route path="/adminstats" element={<AdminStats />} />
+                                <Route path="/success" element={<Success />} />
+                                <Route path="/response" element={<Response />} />
+                                <Route path="/failure" element={<Failure />} />
                             </Routes>
                         </div>
                         <Footer />

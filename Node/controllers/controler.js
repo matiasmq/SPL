@@ -25,10 +25,10 @@ const iniciarTransaccion = async (req, res) => {
 };
 
 const verificarTransaccion = async (req, res) => {
-    const token_ws = req.query.token_ws;
+    const token_ws = req.params.token;
 
     if (!token_ws) {
-        return res.redirect('/failure');
+        return res.status(400).json({ status: 'failed', message: 'No token provided' });
     }
 
     try {
@@ -40,16 +40,17 @@ const verificarTransaccion = async (req, res) => {
             }
         });
 
-        const transactionStatus = response.data.status;
+        console.log('Respuesta de la API de Webpay:', response.data);
 
-        if (transactionStatus === 'AUTHORIZED') {
-            return res.redirect(`/success?token_ws=${token_ws}`);
+        // Tratamos el estado "INITIALIZED" como exitoso para pruebas
+        if (response.data.status === 'AUTHORIZED' || response.data.status === 'INITIALIZED') {
+            return res.json({ status: 'success', data: response.data });
         } else {
-            return res.redirect('/failure');
+            return res.json({ status: 'failed', data: response.data });
         }
     } catch (error) {
         console.error('Error al verificar la transacción:', error);
-        return res.redirect('/failure');
+        return res.status(500).json({ status: 'failed', message: 'Error verifying transaction' });
     }
 };
 

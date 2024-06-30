@@ -1,7 +1,7 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
 import '../styles/Carrito.css';
-//a
+
 const Pago = () => {
     const navigate = useNavigate();
     const [direccionEncontrada, setDireccionEncontrada] = useState(null);
@@ -52,7 +52,6 @@ const Pago = () => {
                     console.error('Error:', error);
                 });
         }
-        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
     const handleEdit = () => {
@@ -62,18 +61,18 @@ const Pago = () => {
 
     const handleSave = async () => {
         let idDireccion = editedDireccion.id_direccion;
-    
+
         if (!idDireccion && direccionEncontrada) {
             idDireccion = direccionEncontrada.id_direccion;
         }
-    
+
         if (!idDireccion) {
             console.error('No se encontró el ID de dirección.');
             return;
         }
-    
+
         const { numero_casa, calle, poblacion, descripcion, sector } = editedDireccion;
-    
+
         const requestBody = {
             address_id: idDireccion,
             number_house: numero_casa,
@@ -82,7 +81,7 @@ const Pago = () => {
             description: descripcion,
             sector: sector
         };
-    
+
         try {
             const response = await fetch('https://entreraices-production.up.railway.app/api/address/update', {
                 method: 'PUT',
@@ -91,7 +90,7 @@ const Pago = () => {
                 },
                 body: JSON.stringify(requestBody),
             });
-    
+
             if (response.ok) {
                 setDireccionEncontrada({ ...editedDireccion });
                 setEditMode(false);
@@ -113,10 +112,36 @@ const Pago = () => {
 
     const iniciarTransaccion = async () => {
         const userId = localStorage.getItem('id_usuario');
+        const carritoTotal = localStorage.getItem('carritoTotal');
+
+        // Primero, actualiza el carrito en la base de datos
+        const requestBodyTicket = {
+            user_id: userId,
+        };
+
+        try {
+            const responseTicket = await fetch('https://entreraices-production.up.railway.app/api/ticket/get', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(requestBodyTicket),
+            });
+
+            if (!responseTicket.ok) {
+                console.error('Error al enviar la solicitud (Ticket):', responseTicket.status);
+                return;
+            }
+        } catch (error) {
+            console.error('Error:', error);
+            return;
+        }
+
+        // Luego, inicia la transacción con Webpay Plus
         const buyOrder = 'order' + new Date().getTime(); // Generar un número de orden único
         const sessionId = 'session' + new Date().getTime(); // Generar un ID de sesión único
-        const amount = 15000; // Monto de la transacción
-        const returnUrl = 'https://tu-sitio-web.com/webpay-return'; // URL a la que Webpay redirige después del pago
+        const amount = carritoTotal ? parseFloat(carritoTotal) : 0; // Monto de la transacción
+        const returnUrl = 'http://localhost:3000/success'; // URL a la que Webpay redirige después del pago
 
         const requestBody = {
             buyOrder,
@@ -137,6 +162,11 @@ const Pago = () => {
 
             if (response.ok) {
                 const data = await response.json();
+                // Guardar el token en localStorage para verificar después del pago
+                localStorage.setItem('token_ws', data.token);
+                // Limpiar el carrito antes de redirigir
+                localStorage.removeItem('carrito');
+                localStorage.removeItem('carritoTotal');
                 window.location.href = `${data.url}?token_ws=${data.token}`;
             } else {
                 console.error('Error al iniciar la transacción:', response.status);
@@ -146,14 +176,48 @@ const Pago = () => {
         }
     };
 
+    const verificarTransaccion = useCallback(async () => {
+        const token_ws = localStorage.getItem('token_ws');
+        if (!token_ws) return;
+
+        try {
+            const response = await fetch(`https://entreraices-production.up.railway.app/api/webpay/verify/${token_ws}`, {
+                method: 'GET',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+            });
+
+            if (response.ok) {
+                const data = await response.json();
+                if (data.status === 'success') {
+                    // Limpiar el carrito
+                    localStorage.removeItem('carrito');
+                    localStorage.removeItem('carritoTotal');
+                    navigate('/success');
+                } else {
+                    console.error('Error en la transacción:', data);
+                }
+            } else {
+                console.error('Error al verificar la transacción:', response.status);
+            }
+        } catch (error) {
+            console.error('Error:', error);
+        }
+    }, [navigate]);
+
+    useEffect(() => {
+        verificarTransaccion();
+    }, [verificarTransaccion]);
+
     const handleCancelarPedido = async () => {
         const userId = localStorage.getItem('id_usuario');
-    
+
         if (userId) {
             const requestBody = {
                 client_id: userId,
             };
-    
+
             try {
                 const response = await fetch('https://entreraices-production.up.railway.app/api/cart/remove', {
                     method: 'POST',
@@ -162,7 +226,7 @@ const Pago = () => {
                     },
                     body: JSON.stringify(requestBody),
                 });
-    
+
                 if (response.ok) {
                     console.log('Carrito vaciado correctamente.', requestBody);
                 } else {
@@ -172,7 +236,7 @@ const Pago = () => {
                 console.error('Error:', error);
             }
         }
-    
+
         navigate('/carrito');
     };
 
