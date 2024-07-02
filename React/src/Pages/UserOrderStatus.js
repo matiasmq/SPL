@@ -15,7 +15,7 @@ function UserOrderStatus() {
 
     const fetchUserOrders = async () => {
       try {
-        const response = await fetch('https://entreraices-production.up.railway.app/api/pedidos/all');
+        const response = await fetch('https://entreraices-production.up.railway.app/api/pedidos/get');
         if (!response.ok) {
           throw new Error('Error al obtener los pedidos');
         }
@@ -23,10 +23,10 @@ function UserOrderStatus() {
         const data = await response.json();
         console.log('Todos los pedidos recibidos:', data);
 
-        if (data && Array.isArray(data.msg)) {
-          const filteredOrders = data.msg.filter(order => order.rut === userRut);
+        if (data && Array.isArray(data.data)) {
+          const filteredOrders = data.data.filter(order => order.rut === userRut);
           const ordersWithDate = filteredOrders.map(order => {
-            const fechaCompleta = new Date(order.fecha);
+            const fechaCompleta = new Date(order.fecha_emision);
             fechaCompleta.setHours(fechaCompleta.getHours());
             const dia = fechaCompleta.getDate().toString().padStart(2, '0');
             const mes = (fechaCompleta.getMonth() + 1).toString().padStart(2, '0');
@@ -59,57 +59,56 @@ function UserOrderStatus() {
     navigate('/userlistos');
   };
 
+  const paginate = (pageNumber) => setCurrentPage(pageNumber);
 
-const paginate = (pageNumber) => setCurrentPage(pageNumber);
+  const pageCount = Math.ceil(userOrders.length / ordersPerPage);
 
-const pageCount = Math.ceil(userOrders.length / ordersPerPage);
+  const currentOrders = userOrders.slice(
+    currentPage * ordersPerPage,
+    (currentPage + 1) * ordersPerPage
+  );
 
-const currentOrders = userOrders.slice(
-  currentPage * ordersPerPage,
-  (currentPage + 1) * ordersPerPage
-);
+  const renderPageNumbers = pageCount > 1 && Array.from({ length: pageCount }).map((_, index) => (
+    <button key={index} onClick={() => paginate(index)} disabled={currentPage === index}>
+      {index + 1}
+    </button>
+  ));
 
-const renderPageNumbers = pageCount > 1 && Array.from({ length: pageCount }).map((_, index) => (
-  <button key={index} onClick={() => paginate(index)} disabled={currentPage === index}>
-    {index + 1}
-  </button>
-));
-
-return (
-  <div className='fondo-pedido-user'>
-    <h2>Mi Pedido</h2>
-    <button className='user-listos' onClick={handlePedidosListos}>Pedidos Listos</button>
-    <table>
-      <thead>
-        <tr>
-          <th>ID Pedido</th>
-          <th>Fecha emision</th>
-          <th>Nombre</th>
-          <th>Rut</th>
-          <th>Producto</th>
-          <th>Cantidad</th>
-          <th>Estado</th>
-        </tr>
-      </thead>
-      <tbody>
-        {currentOrders.reverse().map(order => (
-          <tr key={order.id_detalle_boleta} className={getOrderStatusClass(order.estado)}>
-            <td>{order.id_detalle_boleta}</td>
-            <td>{order.fechaYHora}</td>
-            <td>{order.nombre_usuario}</td>
-            <td>{order.rut}</td>
-            <td>{order.nombre_producto}</td>
-            <td>{order.cantidad}</td>
-            <td>{order.estado}</td>
+  return (
+    <div className='fondo-pedido-user'>
+      <h2>Mi Pedido</h2>
+      <button className='user-listos' onClick={handlePedidosListos}>Pedidos Listos</button>
+      <table>
+        <thead>
+          <tr>
+            <th>ID Pedido</th>
+            <th>Fecha emisión</th>
+            <th>Nombre</th>
+            <th>Rut</th>
+            <th>Producto</th>
+            <th>Cantidad</th>
+            <th>Estado</th>
           </tr>
-        ))}
-      </tbody>
-    </table>
-    <div className='pagination'>
-      {renderPageNumbers}
+        </thead>
+        <tbody>
+          {currentOrders.reverse().map(order => (
+            <tr key={order.id_pedido} className={getOrderStatusClass(order.estado)}>
+              <td>{order.id_pedido}</td>
+              <td>{order.fechaYHora}</td>
+              <td>{order.nombre_usuario}</td>
+              <td>{order.rut}</td>
+              <td>{order.nombre_producto}</td>
+              <td>{order.cantidad}</td>
+              <td>{order.estado}</td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
+      <div className='pagination'>
+        {renderPageNumbers}
+      </div>
     </div>
-  </div>
-);
+  );
 }
 
 export default UserOrderStatus;
