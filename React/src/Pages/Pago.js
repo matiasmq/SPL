@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
 import '../styles/Carrito.css';
 
@@ -7,11 +7,6 @@ const Pago = () => {
     const [direccionEncontrada, setDireccionEncontrada] = useState(null);
     const [editMode, setEditMode] = useState(false);
     const [editedDireccion, setEditedDireccion] = useState({ ...direccionEncontrada });
-    const [checkoutDetails, setCheckoutDetails] = useState({
-        numeroTarjeta: '',
-        fechaExpiracion: '',
-        codigoSeguridad: '',
-    });
 
     useEffect(() => {
         const userId = localStorage.getItem('id_usuario');
@@ -57,7 +52,6 @@ const Pago = () => {
                     console.error('Error:', error);
                 });
         }
-        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
     const handleEdit = () => {
@@ -67,18 +61,18 @@ const Pago = () => {
 
     const handleSave = async () => {
         let idDireccion = editedDireccion.id_direccion;
-    
+
         if (!idDireccion && direccionEncontrada) {
             idDireccion = direccionEncontrada.id_direccion;
         }
-    
+
         if (!idDireccion) {
             console.error('No se encontró el ID de dirección.');
             return;
         }
-    
+
         const { numero_casa, calle, poblacion, descripcion, sector } = editedDireccion;
-    
+
         const requestBody = {
             address_id: idDireccion,
             number_house: numero_casa,
@@ -87,7 +81,7 @@ const Pago = () => {
             description: descripcion,
             sector: sector
         };
-    
+
         try {
             const response = await fetch('https://entreraices-production.up.railway.app/api/address/update', {
                 method: 'PUT',
@@ -96,7 +90,7 @@ const Pago = () => {
                 },
                 body: JSON.stringify(requestBody),
             });
-    
+
             if (response.ok) {
                 setDireccionEncontrada({ ...editedDireccion });
                 setEditMode(false);
@@ -116,18 +110,14 @@ const Pago = () => {
         setEditedDireccion({ ...editedDireccion, [field]: value });
     };
 
-    const prepareCheckout = async () => {
+    const iniciarTransaccion = async () => {
         const userId = localStorage.getItem('id_usuario');
+        const carritoTotal = localStorage.getItem('carritoTotal');
+
+        // Primero, actualiza el carrito en la base de datos
         const requestBodyTicket = {
             user_id: userId,
         };
-
-        const { numeroTarjeta, fechaExpiracion, codigoSeguridad } = checkoutDetails;
-
-        if (!numeroTarjeta || !fechaExpiracion || !codigoSeguridad) {
-            alert('Por favor, completa todos los campos de pago para continuar.');
-            return;
-        }
 
         try {
             const responseTicket = await fetch('https://entreraices-production.up.railway.app/api/ticket/get', {
@@ -138,28 +128,96 @@ const Pago = () => {
                 body: JSON.stringify(requestBodyTicket),
             });
 
-            if (responseTicket.ok) {
-                const responseDataTicket = await responseTicket.json();
-                console.log('Respuesta del servidor (Ticket):', responseDataTicket);
-            } else {
+            if (!responseTicket.ok) {
                 console.error('Error al enviar la solicitud (Ticket):', responseTicket.status);
+                return;
+            }
+        } catch (error) {
+            console.error('Error:', error);
+            return;
+        }
+
+        // Luego, inicia la transacción con Webpay Plus
+        const buyOrder = 'order' + new Date().getTime(); // Generar un número de orden único
+        const sessionId = 'session' + new Date().getTime(); // Generar un ID de sesión único
+        const amount = carritoTotal ? parseFloat(carritoTotal) : 0; // Monto de la transacción
+        const returnUrl = 'http://localhost:3000/success'; // URL a la que Webpay redirige después del pago
+
+        const requestBody = {
+            buyOrder,
+            sessionId,
+            amount,
+            returnUrl,
+        };
+
+        try {
+            const response = await fetch('https://entreraices-production.up.railway.app/api/webpay/init', 
+                { 
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(requestBody),
+            });
+
+            if (response.ok) {
+                const data = await response.json();
+                // Guardar el token en localStorage para verificar después del pago
+                localStorage.setItem('token_ws', data.token);
+                // Limpiar el carrito antes de redirigir
+                localStorage.removeItem('carrito');
+                localStorage.removeItem('carritoTotal');
+                window.location.href = `${data.url}?token_ws=${data.token}`;
+            } else {
+                console.error('Error al iniciar la transacción:', response.status);
             }
         } catch (error) {
             console.error('Error:', error);
         }
-
-        localStorage.removeItem('carrito');
-        window.location.href = '/Compra';
     };
+
+    const verificarTransaccion = useCallback(async () => {
+        const token_ws = localStorage.getItem('token_ws');
+        if (!token_ws) return;
+
+        try {
+            const response = await fetch(`https://entreraices-production.up.railway.app/api/webpay/verify/${token_ws}`, {
+                method: 'GET',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+            });
+
+            if (response.ok) {
+                const data = await response.json();
+                if (data.status === 'success') {
+                    // Limpiar el carrito
+                    localStorage.removeItem('carrito');
+                    localStorage.removeItem('carritoTotal');
+                    navigate('/success');
+                } else {
+                    console.error('Error en la transacción:', data);
+                }
+            } else {
+                console.error('Error al verificar la transacción:', response.status);
+            }
+        } catch (error) {
+            console.error('Error:', error);
+        }
+    }, [navigate]);
+
+    useEffect(() => {
+        verificarTransaccion();
+    }, [verificarTransaccion]);
 
     const handleCancelarPedido = async () => {
         const userId = localStorage.getItem('id_usuario');
-    
+
         if (userId) {
             const requestBody = {
                 client_id: userId,
             };
-    
+
             try {
                 const response = await fetch('https://entreraices-production.up.railway.app/api/cart/remove', {
                     method: 'POST',
@@ -168,7 +226,7 @@ const Pago = () => {
                     },
                     body: JSON.stringify(requestBody),
                 });
-    
+
                 if (response.ok) {
                     console.log('Carrito vaciado correctamente.', requestBody);
                 } else {
@@ -178,19 +236,14 @@ const Pago = () => {
                 console.error('Error:', error);
             }
         }
-    
-        setCheckoutDetails({
-            numeroTarjeta: '',
-            fechaExpiracion: '',
-            codigoSeguridad: '',
-        });
+
         navigate('/carrito');
-    };    
+    };
 
     return (
         <div className="fondo-pago-container">
             <div className="pago">
-                <center>*Por el momento, solo aceptamos pagos con tarjetas de crédito o débito.</center>
+                <center>*Por el momento, solo aceptamos pagos con Webpay Plus.</center>
                 {direccionEncontrada && (
                     <>
                         <div className="seccion-direccion">
@@ -245,77 +298,9 @@ const Pago = () => {
                         </div>
                         <div className="seccion-pago">
                             <h3>Detalles de Pago</h3>
-                            <input
-                                type="text"
-                                placeholder="Número de Tarjeta"
-                                value={checkoutDetails.numeroTarjeta}
-                                onChange={e => {
-                                const inputValue = e.target.value;
-                                const cleanedValue = inputValue.replace(/-/g, '');
-                                const formattedValue = cleanedValue
-                                    .replace(/\D/g, '')
-                                    .slice(0, 16)
-                                    .match(/.{1,4}/g)
-                                    ?.join('-') || '';
-
-                                setCheckoutDetails({
-                                    ...checkoutDetails,
-                                    numeroTarjeta: formattedValue,
-                                });
-                                }}
-                                maxLength={19}
-                                required
-                            />
-                            <input
-                                type="text"
-                                placeholder="Fecha de Expiración (MM/YY)"
-                                value={checkoutDetails.fechaExpiracion}
-                                onChange={(e) => {
-                                    const inputValue = e.target.value;
-                                    const cleanedValue = inputValue.replace(/\//g, '');
-                                    const formattedValue = cleanedValue
-                                        .replace(/\D/g, '')
-                                        .slice(0, 4)
-                                        .match(/.{1,2}/g)
-                                        ?.join('/') || '';
-
-                                    const month = formattedValue.split('/')[0];
-                                    if (parseInt(month, 10) > 12) {
-                                        alert('El mes no puede ser mayor a 12');
-                                         setCheckoutDetails({
-                                             ...checkoutDetails,
-                                             fechaExpiracion: '',
-                                         });
-                                    } else {
-                                        setCheckoutDetails({
-                                            ...checkoutDetails,
-                                            fechaExpiracion: formattedValue,
-                                        });
-                                    }
-                                }}
-                                maxLength={5}
-                                required
-                            />
-
-                            <input
-                                type="text"
-                                placeholder="Código de Seguridad"
-                                value={checkoutDetails.codigoSeguridad}
-                                onChange={e => {
-                                const inputValue = e.target.value;
-                                const formattedValue = inputValue.replace(/\D/g, '').slice(0, 3);
-
-                                setCheckoutDetails({
-                                    ...checkoutDetails,
-                                    codigoSeguridad: formattedValue,
-                                });
-                                }}
-                                maxLength={3}
-                                required
-                            />
                             <div>
-                                <button onClick={prepareCheckout} className="boton-pago">
-                                    Realizar pago
+                                <button onClick={iniciarTransaccion} className="boton-pago">
+                                    Confirmar Pago
                                 </button>
                                 <button onClick={handleCancelarPedido} className="boton-cancelar">
                                     Cancelar
@@ -328,4 +313,5 @@ const Pago = () => {
         </div>
     );
 };
+
 export default Pago;

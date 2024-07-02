@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
 import '../styles/Carrito.css';
 
@@ -36,6 +36,7 @@ const Carrito = () => {
       const updatedCart = cartItems.filter((_, i) => i !== index);
       setCartItems(updatedCart);
       localStorage.setItem('carrito', JSON.stringify(updatedCart));
+      updateCartTotal(updatedCart);
       window.location.reload();
     }
   };
@@ -45,6 +46,7 @@ const Carrito = () => {
     if (confirmation) {
       setCartItems([]);
       localStorage.removeItem('carrito');
+      localStorage.removeItem('carritoTotal');
       setInputValues({});
       window.location.reload();
     }
@@ -59,6 +61,7 @@ const Carrito = () => {
 
     setCartItems(updatedCart);
     localStorage.setItem('carrito', JSON.stringify(updatedCart));
+    updateCartTotal(updatedCart);
   };
 
   const handleInputChange = (index, value) => {
@@ -100,13 +103,21 @@ const Carrito = () => {
     }
   };
   
-
-  const calcularPrecioTotal = () => {
+  const calcularPrecioTotal = useCallback(() => {
     return cartItems.reduce((total, item) => {
       const itemPrice = item.valor_unitario * item.quantity;
       return total + (isNaN(itemPrice) ? 0 : itemPrice);
     }, 0);
-  };
+  }, [cartItems]);
+
+  const updateCartTotal = useCallback((cartItems) => {
+    const total = calcularPrecioTotal(cartItems);
+    localStorage.setItem('carritoTotal', total);
+  }, [calcularPrecioTotal]);
+
+  useEffect(() => {
+    updateCartTotal(cartItems);
+  }, [cartItems, updateCartTotal]);
 
   return (
     <div className="fondo-carrito-container">
